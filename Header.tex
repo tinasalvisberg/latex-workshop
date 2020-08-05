@@ -1,5 +1,5 @@
 \documentclass[
-fontsize=12pt, % Schriftgrösse 
+fontsize=12pt, % Schriftgrösse
 twoside, % zweiseitig (opt: oneside)
 headings=small, chapterprefix=false, numbers=noenddot, toc=indent, chapterentrydots=true] {scrbook} % vgl. Optionen in der Koma script Dokumentation
 
@@ -13,12 +13,12 @@ headings=small, chapterprefix=false, numbers=noenddot, toc=indent, chapterentryd
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Sprachen und Zeichen
-\usepackage[T1]{fontenc} 
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
 
 \usepackage{verbatim} % für mehrzeiligen %-Kommentar: \begin{comment} ... \end{comment}
-\usepackage[style=german]{csquotes} % Anführungszeichen global wechseln, im Text: \enquote{Text}, \enquote*{Text} erzeugt einfache Anführungszeichen 
+\usepackage[style=german]{csquotes} % Anführungszeichen global wechseln, im Text: \enquote{Text}, \enquote*{Text} erzeugt einfache Anführungszeichen
 \usepackage[table]{xcolor} % Farben laden
 \usepackage{rotating} % für vertikalen Text: \begin{rotate}{90} Text \end{rotate}
 \usepackage{hyperref} % Für Querverweise aller Art, verweist auf \label{}
@@ -46,10 +46,10 @@ footskip=1.5cm, % Abstand von Text (inkl. Fussnoten) zu Fusszeile
 \sloppy
 \raggedbottom % Damit die Absätze zusammen bleiben und nicht gedehnt werden
 \clubpenalty = 10000
-\widowpenalty = 10000 
+\widowpenalty = 10000
 \displaywidowpenalty = 10000 % Diese drei sind gegen Hurensöhne und Schusterjungen
 %\hyphenpenalty=50  % Wert für das Unterdrücken der Silbentrennung
-%\tolerance=100     % Wert für die Toleranz, Abstände zwischen den Wörtern zu variieren 
+%\tolerance=100     % Wert für die Toleranz, Abstände zwischen den Wörtern zu variieren
 \frenchspacing % Damit die Abstände nach dem Satzende nicht grösser als normal sind, in KOMA Script eigentlich Standard
 
 % Befehle der Textauszeichnung
@@ -79,7 +79,7 @@ footskip=1.5cm, % Abstand von Text (inkl. Fussnoten) zu Fusszeile
 \setcounter{secnumdepth}{3} % 3 bedeutet also Gliederung bis Subsubsection
 
 % Die Zähler
-\renewcommand{\thepart}{\arabic{part}} 
+\renewcommand{\thepart}{\arabic{part}}
 \renewcommand{\thechapter}{\Roman{chapter}}
 \renewcommand{\thesection}{{\thechapter}.~\arabic{section}}
 \renewcommand\thesubsection{\thesection .~\arabic{subsection}}
@@ -88,7 +88,7 @@ footskip=1.5cm, % Abstand von Text (inkl. Fussnoten) zu Fusszeile
 
 % Den Zahlen eines Zählers Wörter zuordnen. Achtung!: Der Zähler (hier: \thepart) muss \arabic sein!
 \usepackage{datetime}
-\def\ordinal{\ifcase \thepart\or Erster\or Zweiter\or Dritter\or Vierter\or Fünfter\or Sechster\fi} 
+\def\ordinal{\ifcase \thepart\or Erster\or Zweiter\or Dritter\or Vierter\or Fünfter\or Sechster\fi}
 
 % Formatierung der Gliederungsüberschriften
 \renewcommand{\partformat}{\thispagestyle{empty}\mdseries\rmfamily\upshape\Huge\ordinal~Teil} % \ordinal ist oben definiert
@@ -108,16 +108,16 @@ footskip=1.5cm, % Abstand von Text (inkl. Fussnoten) zu Fusszeile
 \RedeclareSectionCommand[
   beforeskip=-1\baselineskip,
   afterskip=.5\baselineskip]{subsection}
- 
+
 % damit die Chapterzählung in jedem part neu beginnt
  %\makeatletter
  %\@addtoreset{chapter}{part}
- %\makeatother 
+ %\makeatother
 
 % für durchgehende Nummerierung (z.B. bei §)
  %\usepackage{chngcntr}
- %\counterwithin{chapter}{part} 
-  
+ %\counterwithin{chapter}{part}
+
 
 
 %Kopf- und Fusszeile
@@ -134,11 +134,11 @@ footskip=1.5cm, % Abstand von Text (inkl. Fussnoten) zu Fusszeile
 \makeatletter
 \ifoot{Autor: \@author \\Datum: \@date} % Einbinden von Autor und Datum in Innen Fusszeile
 \makeatother
-% Die Möglichkeiten der Positionierungen ergeben sich also aus der Kombination von i/c/o und head/foot. 
+% Die Möglichkeiten der Positionierungen ergeben sich also aus der Kombination von i/c/o und head/foot.
 
 % Zähler weglassen:
-%\renewcommand*{\chaptermarkformat}{} 
-%\renewcommand*{\sectionmarkformat}{} 
+%\renewcommand*{\chaptermarkformat}{}
+%\renewcommand*{\sectionmarkformat}{}
 
 % Formatierung
 \setkomafont{pagehead}{\footnotesize\textup} % Formatierung der Kopfzeile
@@ -158,7 +158,7 @@ footskip=1.5cm, % Abstand von Text (inkl. Fussnoten) zu Fusszeile
 \DeclareRobustCommand{\f}{\footnote}
 
 % Linie vor Fussnoten
-\setfootnoterule{5cm} 
+\setfootnoterule{5cm}
 \newlength\flinie
 \setlength\flinie{12.5cm} % Ergibt eine Linie von 5 cm, keine Ahnung, warum der Faktor 2.5x
 \makeatletter
@@ -175,15 +175,15 @@ marginal, % Einzug, mit \setlength{\footnotemargin}{...}
 multiple, % Mehrere Fussnoten im Text nacheinander möglich
 % norule, %keine Linie
 stable, % Fussnoten in den Gliederungsüberschriften möglich,
-bottom % raggedbottom für Fussnoten 
+bottom % raggedbottom für Fussnoten
 % perpage % für Neunummerierung auf jeder Seite
 ]
-{footmisc} 
+{footmisc}
 \setlength{\footnotemargin}{0.6cm} %Einzug
 \setlength{\footnotesep}{7.5pt} % Abstände zwischen den Fussnoten?
 \interfootnotelinepenalty=10000 % Verhindert das Fortsetzen von Fussnoten auf der gegenüberliegenden Seite
 
-% Formatierung der Fussnotenzähler: 
+% Formatierung der Fussnotenzähler:
 \deffootnote{0.6cm}{0.3cm}{\makebox[0.6cm][l]{\thefootnotemark}}
 
 %\usepackage{remreset} % damit die Nummerierung nach section neu anfängt, und nicht nach chapter
@@ -197,7 +197,7 @@ bottom % raggedbottom für Fussnoten
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{setspace} % ACHTUNG!: muss nach \usepackage{footmisc} eingebunden werden.
-% Direkt im Text: “\singlespacing”, “\onehalfspacing” oder “\doublespacing” 
+% Direkt im Text: “\singlespacing”, “\onehalfspacing” oder “\doublespacing”
 
 \begin{comment}
 % Gleich 1.5-Zeilenabstand in Word (sinnlos, aber vielleicht eines Tages nützlich)
@@ -232,8 +232,8 @@ bottom % raggedbottom für Fussnoten
 
 % Zitat
 \renewenvironment{quote} % Links und rechts Einzüge anpassen
-   {\list{}{\leftmargin.4cm\rightmargin0cm\parsep0pt\topsep.2cm plus.2cm minus.1cm}\item\relax} 
-   {\endlist} 
+   {\list{}{\leftmargin.4cm\rightmargin0cm\parsep0pt\topsep.2cm plus.2cm minus.1cm}\item\relax}
+   {\endlist}
 
 \makeatletter % Damit noindent (kein Einzug) danach, auch nicht mit leerer Zeile dazwischen
 \newcommand*{\@doendeq}{%
@@ -262,12 +262,12 @@ font={scriptsize, it, singlespacing}, % Formatierung
 width=12cm, % Breite
 skip=0.2cm % Abstand zum Bild
 ]{caption}
- 
+
 \renewcaptionname{ngerman}{\figurename}{Abb:} % damit kann man das label Abb: ändern
 \renewcaptionname{ngerman}{\listfigurename}{Abbildungen} % Titel des Abbildungsverzeichnisses, wird mit \listoffigures im Text eingebunden
 
 
-% Tabelle 
+% Tabelle
 \usepackage{multirow} % für mehrzeilige Zellen
 \usepackage{array}
 \renewcommand{\arraystretch}{1.5} % für Abstand zwischen Zeilen und Linien
@@ -331,6 +331,3 @@ skip=0.2cm % Abstand zum Bild
 % “\printindex[aut]” bzw. “\printindex[res]” für das Erzeugen der Verzeichnisse im Hauptdokument
 
 \usepackage{balance} % um die beiden Spalten auf der letzten Seite des Index bündig zu machen. Dazu muss \balance irgendwo bei einem Eintrag in der linken Spalte stehen (z.B.: \index[aut]{Platon\balance})
-
-
-
