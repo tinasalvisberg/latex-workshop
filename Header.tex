@@ -255,7 +255,7 @@ bottom % raggedbottom für Fussnoten
 
 % Bildbeschriftung
 \usepackage[
-labelformat=empty, % ohne "`Abb:"'
+%labelformat=empty, % ohne "`Abb:"'
 textformat=period, % Punkt am Schluss
 justification=centerlast, % letzte Zeile zentriert
 font={scriptsize, it, singlespacing}, % Formatierung
@@ -263,7 +263,11 @@ width=12cm, % Breite
 skip=0.2cm % Abstand zum Bild
 ]{caption}
 
-\renewcaptionname{ngerman}{\figurename}{Abb:} % damit kann man das label Abb: ändern
+\usepackage{chngcntr}
+\counterwithout{figure}{chapter}
+
+
+\renewcaptionname{ngerman}{\figurename}{Abb.} % damit kann man das label Abb: ändern
 \renewcaptionname{ngerman}{\listfigurename}{Abbildungen} % Titel des Abbildungsverzeichnisses, wird mit \listoffigures im Text eingebunden
 
 
