@@ -1,0 +1,336 @@
+\documentclass[
+fontsize=12pt, % Schriftgrösse 
+twoside, % zweiseitig (opt: oneside)
+headings=small, chapterprefix=false, numbers=noenddot, toc=indent, chapterentrydots=true] {scrbook} % vgl. Optionen in der Koma script Dokumentation
+
+\date{05.08.2020}
+\author{Marc Bayard}
+\title{Header Vorlage}
+% Vorlage für einen Header für den LaTeX-Workshop vom 05.08.2020 an der ZHB Luzern
+
+
+% Allgemeine Pakete und Befehle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Sprachen und Zeichen
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+\usepackage{verbatim} % für mehrzeiligen %-Kommentar: \begin{comment} ... \end{comment}
+\usepackage[style=german]{csquotes} % Anführungszeichen global wechseln, im Text: \enquote{Text}, \enquote*{Text} erzeugt einfache Anführungszeichen 
+\usepackage[table]{xcolor} % Farben laden
+\usepackage{rotating} % für vertikalen Text: \begin{rotate}{90} Text \end{rotate}
+\usepackage{hyperref} % Für Querverweise aller Art, verweist auf \label{}
+% \pageref für die Seitenzahl, \ref für den Zähler der nächsthöheren Überschrift \nameref für den Titel der nächsthöheren Überschrift (Kurztitel, falls vorhanden)
+% Beispiel für einen Seitenverweis: Bei "siehe auf Seite \pageref{These}" wird die Seitenzahl der Seite eingefügt auf der \label{These} steht.
+% Beispiel für selbstdefinierten Verweisbefehl: \newcommand{\myref}[1]{\footnote{Siehe Kapitel \ref{#1}: \enquote{\nameref{#1}} auf S.~\pageref{#1}.}} Im Text wird mit \myref{These} eine Fussnote mit dem angegebenen Text und den Verweisen auf \label{These} erstellt.
+
+% Seitenlayout
+\usepackage[
+paperwidth=21cm, % Papierbreite
+paperheight=29.7cm, % Papierhöhe
+twoside, % zweiseitig
+inner=2.5cm, % Rand innen
+outer=3cm, % Rand aussen
+top=2cm, % Rand oben
+bottom=2cm, % Rand unten
+includeheadfoot, % Kopf- und Fusszeilen innerhalb der Ränder
+headheight=1cm, % Höhe der Kopfzeile
+headsep=0.5cm, % Abstand von Kopfzeile zu Text
+footskip=1.5cm, % Abstand von Text (inkl. Fussnoten) zu Fusszeile
+]{geometry}
+
+%\setlength\parindent{0pt} % Damit werden die ersten Zeilen eines Absatzes nicht eingerückt
+\RequirePackage[ngerman=ngerman-x-latest]{hyphsubst} % für bessere Trennung (wird laufend verändert...)
+\sloppy
+\raggedbottom % Damit die Absätze zusammen bleiben und nicht gedehnt werden
+\clubpenalty = 10000
+\widowpenalty = 10000 
+\displaywidowpenalty = 10000 % Diese drei sind gegen Hurensöhne und Schusterjungen
+%\hyphenpenalty=50  % Wert für das Unterdrücken der Silbentrennung
+%\tolerance=100     % Wert für die Toleranz, Abstände zwischen den Wörtern zu variieren 
+\frenchspacing % Damit die Abstände nach dem Satzende nicht grösser als normal sind, in KOMA Script eigentlich Standard
+
+% Befehle der Textauszeichnung
+\newcommand{\zit}{\enquote} % normales Zitat in doppelten Anführungszeichen
+\newcommand{\zite}{\enquote*} % Zitat im Zitat in einfachen Anführungszeichen
+% längeres Zitat siehe unten "Umgebungen"
+\newcommand{\wt}{\enquote*} % Werktitel in einfachen Anführungszeichen
+\newcommand{\uwg}{\enquote*} % uneigentlicher Wortgebrauch in einfachen Anführungszeichen, Bsp.: "Goethe liebte das ,Sowohl-als-auch' der Sprache."
+\newcommand{\lat}{\textit} % lateinische Begriffe kursiv
+\newcommand{\bet}{\textit} % Betonung kursiv, Bsp.: "Er hat die Frage zwar nicht /gelöst/, aber er hat sie /erlöst/, gelöst werden zu müssen."
+
+% Schriftart
+\usepackage{libertine}
+%\usepackage{emgaramond}
+
+
+
+% Gliederung
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Eingabe direkt im Text: \Gliederungsbefehl[Kurztitel]{Überschrift}
+% - \Giederungsbefehl: definiert die Ebene, z.B. \chapter; bei \chapter* wird kein Zähler erzeugt
+% - [Kurztitel]: Für Inhaltsverzeichnis und die automatischen Kopfzeilen (automark) kann man die Gliederungsüberschriften kürzen (optional)
+% - {Überschrift}: Selbstgewählter Titel (ohne Zähler, der wird automatisch hinzugefügt)
+
+% Tiefe der Nummerierung in der Gliederung, (part=-1)
+\setcounter{secnumdepth}{3} % 3 bedeutet also Gliederung bis Subsubsection
+
+% Die Zähler
+\renewcommand{\thepart}{\arabic{part}} 
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thesection}{{\thechapter}.~\arabic{section}}
+\renewcommand\thesubsection{\thesection .~\arabic{subsection}}
+\renewcommand\thesubsubsection{}
+\renewcommand\theparagraph{}
+
+% Den Zahlen eines Zählers Wörter zuordnen. Achtung!: Der Zähler (hier: \thepart) muss \arabic sein!
+\usepackage{datetime}
+\def\ordinal{\ifcase \thepart\or Erster\or Zweiter\or Dritter\or Vierter\or Fünfter\or Sechster\fi} 
+
+% Formatierung der Gliederungsüberschriften
+\renewcommand{\partformat}{\thispagestyle{empty}\mdseries\rmfamily\upshape\Huge\ordinal~Teil} % \ordinal ist oben definiert
+\setkomafont{part}{\thispagestyle{empty}\mdseries\rmfamily\centering\upshape\Huge}
+\renewcommand{\chapterformat}{\mdseries\rmfamily\upshape\Large\thechapter ~\,}
+\setkomafont{chapter}{\Large\selectfont\mdseries\rmfamily\centering\upshape}
+\setkomafont{section}{\mdseries\rmfamily\upshape\large}
+\setkomafont{subsection}{\mdseries\rmfamily\upshape\normalsize}
+
+%\renewcommand*{\raggedsection}{\centering} % Überschriften global zentrieren
+\setkomafont{disposition}{\selectfont} % Damit in Überschriften dieselbe Schriftart ist.
+
+% Kosmetik bei den vertikalen Abständen
+\RedeclareSectionCommand[
+  beforeskip=-2\baselineskip,
+  afterskip=1\baselineskip]{section}
+\RedeclareSectionCommand[
+  beforeskip=-1\baselineskip,
+  afterskip=.5\baselineskip]{subsection}
+ 
+% damit die Chapterzählung in jedem part neu beginnt
+ %\makeatletter
+ %\@addtoreset{chapter}{part}
+ %\makeatother 
+
+% für durchgehende Nummerierung (z.B. bei §)
+ %\usepackage{chngcntr}
+ %\counterwithin{chapter}{part} 
+  
+
+
+%Kopf- und Fusszeile
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\clearpairofpagestyles % alles Bisherige löschen
+
+% Inhalte
+\automark[section]{chapter} % automatisch Überschriften in der Kopfzeile wählen (rechte Seite und linke Seite)
+\chead{\headmark} % Einbinden der automatischen Überschriften in Mitte Kopfzeile
+\ofoot{\pagemark} % Seitenzahlen in Aussen Fusszeile
+\makeatletter
+\ifoot{Autor: \@author \\Datum: \@date} % Einbinden von Autor und Datum in Innen Fusszeile
+\makeatother
+% Die Möglichkeiten der Positionierungen ergeben sich also aus der Kombination von i/c/o und head/foot. 
+
+% Zähler weglassen:
+%\renewcommand*{\chaptermarkformat}{} 
+%\renewcommand*{\sectionmarkformat}{} 
+
+% Formatierung
+\setkomafont{pagehead}{\footnotesize\textup} % Formatierung der Kopfzeile
+\setkomafont{pagenumber} {\small % Formatierung der Seitenzahl
+%\rightline % bei oneside
+}
+
+% Eigener Stil für Seiten mit Kapitelüberschrift
+\renewcommand\chapterpagestyle{empty} % empty = leere Kopf- und Fusszeile
+
+
+
+%Fussnoten
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Kurzbefehl
+\DeclareRobustCommand{\f}{\footnote}
+
+% Linie vor Fussnoten
+\setfootnoterule{5cm} 
+\newlength\flinie
+\setlength\flinie{12.5cm} % Ergibt eine Linie von 5 cm, keine Ahnung, warum der Faktor 2.5x
+\makeatletter
+\setlength{\skip\footins}{22.4pt}% woher die .4 kommen sieht man gleich
+\renewcommand\footnoterule{%
+\kern-12.4\p@% Platz unter der Linie + Liniendicke
+\hrule\@width.4\flinie% Länge ggf. anpassen
+\kern12\p@}% Platz unter der Linie
+\makeatother
+
+% Formatierung
+\usepackage[hang, % Layout wie Nummerierung
+marginal, % Einzug, mit \setlength{\footnotemargin}{...}
+multiple, % Mehrere Fussnoten im Text nacheinander möglich
+% norule, %keine Linie
+stable, % Fussnoten in den Gliederungsüberschriften möglich,
+bottom % raggedbottom für Fussnoten 
+% perpage % für Neunummerierung auf jeder Seite
+]
+{footmisc} 
+\setlength{\footnotemargin}{0.6cm} %Einzug
+\setlength{\footnotesep}{7.5pt} % Abstände zwischen den Fussnoten?
+\interfootnotelinepenalty=10000 % Verhindert das Fortsetzen von Fussnoten auf der gegenüberliegenden Seite
+
+% Formatierung der Fussnotenzähler: 
+\deffootnote{0.6cm}{0.3cm}{\makebox[0.6cm][l]{\thefootnotemark}}
+
+%\usepackage{remreset} % damit die Nummerierung nach section neu anfängt, und nicht nach chapter
+%\makeatletter
+%\@removefromreset{footnote}{chapter}
+%\@addtoreset{footnote}{section}
+%\makeatother
+
+
+%Zeilenabstand
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{setspace} % ACHTUNG!: muss nach \usepackage{footmisc} eingebunden werden.
+% Direkt im Text: “\singlespacing”, “\onehalfspacing” oder “\doublespacing” 
+
+\begin{comment}
+% Gleich 1.5-Zeilenabstand in Word (sinnlos, aber vielleicht eines Tages nützlich)
+\makeatletter
+\newcommand{\MSonehalfspacing}{%
+  \setstretch{1.44}%  default
+  \ifcase \@ptsize \relax % 10pt
+    \setstretch {1.448}%
+  \or % 11pt
+    \setstretch {1.399}%
+  \or % 12pt
+    \setstretch {1.433}%
+  \fi
+}
+\newcommand{\MSdoublespacing}{%
+  \setstretch {1.92}%  default
+  \ifcase \@ptsize \relax % 10pt
+    \setstretch {1.936}%
+  \or % 11pt
+    \setstretch {1.866}%
+  \or % 12pt
+    \setstretch {1.902}%
+  \fi
+}
+\makeatother
+\end{comment}
+
+
+
+%Umgebungen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Zitat
+\renewenvironment{quote} % Links und rechts Einzüge anpassen
+   {\list{}{\leftmargin.4cm\rightmargin0cm\parsep0pt\topsep.2cm plus.2cm minus.1cm}\item\relax} 
+   {\endlist} 
+
+\makeatletter % Damit noindent (kein Einzug) danach, auch nicht mit leerer Zeile dazwischen
+\newcommand*{\@doendeq}{%
+  \everypar{{\setbox\z@\lastbox}\everypar{}}}
+
+\newenvironment{quoter}{\begin{quote} % Neue quote-Umgebung mit eigener Formatierung definieren
+\singlespacing\small\selectfont}{\end{quote}\ignorespacesafterend\par\noindent\aftergroup\@doendeq}
+\makeatother
+% Aufrufen im Text mit \begin{quoter} Text... \end{quoter}
+
+
+% Bilder
+\usepackage{graphicx}
+% Bild im Text einbinden mit
+% \begin{figure}[h]\centering % h ist für hier, statt z.B. unten am Rand
+% \includegraphics[width=12cm]{Bilder/Bilddatei.jpg}
+% \caption{Bildbeschriftung}
+% \end{figure}
+
+% Bildbeschriftung
+\usepackage[
+labelformat=empty, % ohne "`Abb:"'
+textformat=period, % Punkt am Schluss
+justification=centerlast, % letzte Zeile zentriert
+font={scriptsize, it, singlespacing}, % Formatierung
+width=12cm, % Breite
+skip=0.2cm % Abstand zum Bild
+]{caption}
+ 
+\renewcaptionname{ngerman}{\figurename}{Abb:} % damit kann man das label Abb: ändern
+\renewcaptionname{ngerman}{\listfigurename}{Abbildungen} % Titel des Abbildungsverzeichnisses, wird mit \listoffigures im Text eingebunden
+
+
+% Tabelle 
+\usepackage{multirow} % für mehrzeilige Zellen
+\usepackage{array}
+\renewcommand{\arraystretch}{1.5} % für Abstand zwischen Zeilen und Linien
+
+% Tabelle normal, direkt im Text:
+% \begin{tabular}{|p{1cm}|p{11cm}|p{2.5cm}|}
+% \firsthline
+% a & b & c \\ [Durchschuss, wenn nötig, z.B.: 0.2cm]
+% \hline
+% d & e & f \\ [0.2cm]
+% \lasthline
+% \end{tabular}
+
+% Tabelle für erweiterte Bedürfnisse:
+\usepackage{tabularx}
+% direkt im Text:
+% \begin{tabularx}{\textwidth}{@{}|X|X|X|X|@{}} % statt X geht auch c oder r oder dann p{0.5\textwidth} (siehe Dokumentation) oder Y (bzw. selbstdefiniert, siehe unten), @{} verhindert Abstände
+% a & b & c & d \\ [Durchschuss]
+% \hline
+% \end{tabularx}
+
+% \newcolumntype{Y}{>{\centering\arraybackslash}X} % selbstefinierter Spaltentyp mit eigener Formatierung (hier: zentriert)
+
+
+
+%Inhaltsverzeichnis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% “\tableofcontent” für das Erzeugen des Inhaltsverzeichnisses im Hauptdokument
+\setcounter{tocdepth}{3} % Tiefe der angezeigten Gliederung im Inhaltsverzeichnis
+\addtokomafont{sectioning}{\rmfamily} % Damit auch im Inhaltsverzeichnis dieselbe Schrift ist
+
+% Part Überschriften (Gebastel für erweiterte Bedürfnisse ;-)
+\renewcommand*{\addparttocentry}[2]{\addtocentrydefault{part}{\protect\parbox{\textwidth\scshape\large\mdseries}{\hspace*{\fill}\ordinal~\partname\hspace*{\fill}\\ \hspace*{\fill}#2\hspace*{\fill}}}{}} % zentrieren und mit 2 Zeilen: \ordinal und \partname (hier: “n-ter Teil”) sind oben bei Gliederung definiert, sie ersetzten das Argument #1; #2 ist die jeweilige Überschrift; \centering verursacht Probleme, darum die Lösung mit \hspace*{\fill}, das auf beiden Seiten des Textes gleichmässig mit leerem Platz auffüllt.
+\setkomafont{partentrypagenumber}{\color{white}} % Keine Seitenzahl bei part (zugegeben, ein unsauberer Kniff. Wer kennt eine bessere Lösung?)
+
+% Einzüge der Überschriften (von Rand bis Nummerierung, von Nummerierung bis Text)
+\RedeclareSectionCommand[tocindent=0cm,tocnumwidth=0.7cm]{chapter}
+\RedeclareSectionCommand[tocindent=0.7cm,tocnumwidth=1.2cm]{section}
+\RedeclareSectionCommand[tocindent=1.9cm,tocnumwidth=1.4cm]{subsection}
+\RedeclareSectionCommand[tocindent=0cm,tocnumwidth=0.5cm]{subsubsection}
+
+
+
+%Literaturverzeichnis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% folgt...
+
+
+
+
+%Index
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{imakeidx}
+\makeindex[name=aut,title=Personen] % Personenverzeichnis
+\makeindex[name=res,title=Sachen] % Sachverzeichnis
+\makeindex[name=bibel,title=Bibelstellen] % Stellenverzeichnis Bibel
+% \index[aut]{Personenname} direkt in den Text hinter den Personenname, z.B.: “Die Ideenlehre\index[res]{Ideenlehre} Platons\index[aut]{Platon} wurde von Aristoteles\index[aut]{Aristoteles}, einem seiner Schüler, überwunden.”
+% “\printindex[aut]” bzw. “\printindex[res]” für das Erzeugen der Verzeichnisse im Hauptdokument
+
+\usepackage{balance} % um die beiden Spalten auf der letzten Seite des Index bündig zu machen. Dazu muss \balance irgendwo bei einem Eintrag in der linken Spalte stehen (z.B.: \index[aut]{Platon\balance})
+
+
+
