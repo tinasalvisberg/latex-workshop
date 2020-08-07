@@ -320,7 +320,378 @@ skip=0.2cm % Abstand zum Bild
 %Literaturverzeichnis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% folgt...
+%Literaturverzeichnis
+
+
+\usepackage[style=verbose-ibid,backend=biber,bibencoding=utf8,bibwarn=true,language=auto,autolang=none,block=none,backrefstyle=two,
+%sorting=Reihenfolge,
+citepages=omit,ibidpage=true,isbn=false,url=false,doi=false]{biblatex}
+
+\addbibresource{Literatur/Literatur.bib}
+
+
+
+%\DeclareBibliographyCategory{nicht-in-bib}    % Für Einträge im Text, aber nicht im LV
+%\addtocategory{nicht-in-bib}{EB,Dud,CD}
+% dann beim LV: \printbibliography[notcategory=nicht-in-bib]
+
+%\usepackage{ragged2e}
+%\renewcommand*{\bibsetup}{\RaggedRight} % für linksbündig im LV
+
+
+%punctfont=true
+
+\setlength{\bibitemsep}{0cm}     % Abstand zwischen den Literaturangaben
+\setlength{\bibhang}{1cm}        % Einzug nach jeweils erster Zeile
+
+\DeclareRobustCommand{\a}{\autocite}
+\DefineBibliographyStrings{german}{ibidem = {ebd\adddot}} % für die ibid Option
+
+\defbibheading{bibliography}[Literaturverzeichnis]{%
+	\chapter*{#1} \markboth{#1}{#1}
+}                                              % Titel des LV
+%%\defbibheading{subbibliography}[\refname]{\section*{#1}\vspace{0.5em}}
+%%\defbibheading{subsubbibliography}[\refname]{\subsection*{#1}}
+
+%\renewcommand{\bibfont}{\normalfont\small} % Schriftgrösse des LV
+
+\defbibheading{subbibliography}[\refname]{\section*{#1}}
+\defbibheading{subsubbibliography}[\refname]{\subsection*{#1}}
+
+% Damit die family Befehle auch in french funktionieren:
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+
+% erst Nachname, dann Vorname
+%\DeclareNameAlias{default}{last-first}, oder?:
+\DeclareNameAlias{sortname}{family-given} % im LV
+\DeclareNameAlias{default}{family-given} % in den FN
+% Trenner zwischen den Namen ein Semikolon
+\renewcommand*{\multinamedelim}{\addsemicolon\space}
+% Semikolon statt und beim letzten:
+%\renewcommand*{\finalnamedelim}{\addsemicolon\space}
+% Doppelpunkt nach dem letzten Namen
+%\renewcommand*{\labelnamepunct}{\addcolon\space}
+
+% Autorennamen durch Schrägstrich oder Komma bzw. und trennen:
+%\renewcommand*{\multinamedelim}{\addslash}
+%\renewcommand*{\finalnamedelim}{\addslash}
+\renewcommand*{\multinamedelim}{\addcomma\addspace}
+\renewcommand*\finalnamedelim{%
+	\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+	\addspace\bibstring{and}\space}%
+
+% für alle anderen multiplen Einträge
+\renewcommand*{\multilistdelim}{\addslash}
+\renewcommand*{\finallistdelim}{\addslash}
+
+%\DeclareFieldFormat[book]{title}{#1,}
+\renewcommand*{\mkbibnamefamily}[1]{\textsc{#1}} % Kapitälchen oder nicht
+\renewcommand{\labelnamepunct}{\addcomma\addspace} % Komma nach Vornamen
+\renewcommand{\subtitlepunct}{\adddot\addspace} % Punkt zwischen titel und untertitel
+
+
+%\renewbibmacro*{title}{%
+%  \ifthenelse{\iffieldundef{title}\AND\iffieldundef{subtitle}}
+%    {}
+%    {\printtext[title]{%
+%       \printfield[titlecase]{title}}%
+%		   \setunit{\subtitlepunct}%
+%     \printfield{subtitle}%
+%     \newunit}%
+%  \printfield{titleaddon}} % Subtitel als eigenes Feld
+
+
+\renewcommand*{\newunitpunct}{\addcomma\addspace} % Komma statt Punkt nach einzelnen Elementen der Literaturangaben
+
+\DefineBibliographyStrings{german}{%
+	andothers = {u\adddot\ a\adddot},
+	editor = {Hg\adddot}, % wenn der Editor am Anfang steht
+	editors = {Hg\adddot},
+	byeditor = {hg\adddot~von }, % wenn der Editor hinten steht
+}
+
+\renewbibmacro*{publisher+location+date}{%
+	\printlist{location}%
+	\iflistundef{publisher}
+	{\setunit*{\addcomma\space}}
+	{\setunit*{\addcolon\space}}% kein Komma nach Publisher bzw. Ort, je nach:
+	%%\printlist{publisher}% ohne oder mit Publisher
+	\setunit*{\addspace}% vorher: \setunit*{\addcomma\space}
+	\usebibmacro{date}%
+	\newunit}
+
+
+\DeclareFieldFormat{part}{%
+	\iffieldundef{volume}
+	{#1}
+	{\ifnumerals{#1}
+		{,#1} % Komma nach volume, wenn part eine Nummer
+		{\addcomma\addspace#1}} % Komma und Space nach volume, wenn part ein Text
+}
+% Noch besser: Nur das volume-Feld besetzen, dafür:
+\DeclareFieldFormat[book]{volume}{#1}
+\DeclareFieldFormat[article]{volume}{#1}
+\DeclareFieldFormat[bookinbook]{volume}{#1}
+\DeclareFieldFormat[incollection]{volume}{#1}
+\DeclareFieldFormat[inProceedings]{volume}{#1}
+\DeclareFieldFormat[inreference]{volume}{#1}
+
+\DeclareFieldFormat{series}{\iffieldundef{number}{\mkbibparens{#1}}{\bibleftparen % Klammern um series und/ohne number
+		#1}}
+\DeclareFieldFormat{number}{#1\bibrightparen}
+
+\DeclareFieldFormat{issuesubtitle}{#1\upshape}
+
+
+%\DeclareFieldFormat[book]{location}{#1}
+%\DeclareFieldFormat[book]{page}{#1}
+%\DeclareFieldFormat[article]{postnote}{S. #1} % vor Seitenzahlen
+%\DeclareFieldFormat[book]{multipostnote}{#1}
+
+\makeatletter
+\renewbibmacro*{bbx:editor}[1]{%
+	\ifthenelse{\ifuseeditor\AND\NOT\ifnameundef{editor}}
+	{\ifthenelse{\iffieldequals{fullhash}{\bbx@lasthash}\AND
+			\NOT\iffirstonpage\AND
+			\(\NOT\boolean{bbx@inset}\OR
+			\iffieldequalstr{entrysetcount}{1}\)}
+		{\bibnamedash}
+		{\printnames{editor}%
+			\setunit{\addspace}% GEÄNDERT
+			\usebibmacro{bbx:savehash}}%
+		\printtext[parens]{\usebibmacro{#1}}% GEÄNDERT % Für Klammer um Hrsg.
+		\clearname{editor}%
+		\setunit{\addspace},}% plus Komma nach Klammer
+	{\global\undef\bbx@lasthash
+		\usebibmacro{labeltitle}%
+		\setunit*{\addspace}}%
+	%\usebibmacro{date+extrayear}
+}
+\makeatother
+
+
+%\begin{comment} % Damit Translator etc. nicht in Kapitälchen sind. Problem: dann auch Editor nicht, und funzt bei Foreword nicht
+%\renewcommand*{\mkbibnamefamily}[1]{%
+% \ifmknamesc{\textsc{#1}}{#1}}
+
+%\renewcommand*{\mkbibnameprefix}[1]{%
+% \ifboolexpr{ test {\ifmknamesc} and test {\ifuseprefix} }
+%   {\textsc{#1}}
+% {#1}}
+
+%\def\ifmknamesc{%
+%\ifboolexpr{ test {\ifcurrentname{labelname}}
+%           or test {\ifcurrentname{author}}
+%         or ( test {\ifnameundef{author}} and test {\ifcurrentname{editor}} ) }}
+%\end{comment}
+
+
+\DeclareBibliographyDriver{book}{%
+	\usebibmacro{bibindex}%
+	\usebibmacro{begentry}%
+	\usebibmacro{author/editor+others/translator+others}%
+	\setunit{\labelnamepunct}\newblock
+	\usebibmacro{maintitle+title}%
+	\newunit
+	\printlist{language}%
+	\newunit\newblock
+	\usebibmacro{byauthor}%
+	\newunit\newblock
+	\usebibmacro{byeditor+others}%
+	\newunit\newblock
+	\printfield{edition}%
+	\newunit
+	\iffieldundef{maintitle}
+	\newunit\newblock
+	\setunit{\addspace} % Kein Komma vor Reihentitel
+    \usebibmacro{series+number}%
+	\newunit\newblock
+	\usebibmacro{publisher+location+date}%
+	\newunit
+	\printfield{note}%
+	\newunit\newblock
+	\usebibmacro{chapter+pages}%
+	\newunit
+	\printfield{pagetotal}%
+	\newunit\newblock
+	\iftoggle{bbx:isbn}
+	{\printfield{isbn}}
+	{}%
+	\newunit\newblock
+	\usebibmacro{doi+eprint+url}%
+	\newunit\newblock
+	\usebibmacro{addendum+pubstate}%
+	\setunit{\bibpagerefpunct}\newblock
+	\usebibmacro{pageref}%
+	\newunit\newblock
+	\iftoggle{bbx:related}
+	{\usebibmacro{related:init}%
+		\usebibmacro{related}}
+	{}%
+	\usebibmacro{finentry}}
+
+
+\DeclareBibliographyDriver{incollection}{%
+	\usebibmacro{bibindex}%
+	\usebibmacro{begentry}%
+	\usebibmacro{author/translator+others}%
+	\setunit{\labelnamepunct}\newblock
+	\usebibmacro{title}%
+	\newunit
+	\printlist{language}%
+	\newunit\newblock
+	\usebibmacro{byauthor}%
+	\newunit\newblock
+	\usebibmacro{in:}%
+	\usebibmacro{maintitle+booktitle}%
+	\newunit
+	\usebibmacro{byeditor+others}
+	\newunit\newblock
+	\iffieldundef{maintitle}
+	{\printfield{volume}%
+		\printfield{part}}
+	{}%
+	\setunit{\addspace}
+	\usebibmacro{series+number}%
+	\newunit\newblock
+	\printfield{note}%
+	\newunit\newblock
+	\usebibmacro{publisher+location+date}%
+	\newunit\newblock
+	\usebibmacro{doi+eprint+url}%
+	\newunit\newblock
+	\usebibmacro{addendum+pubstate}%
+	\newblock
+	\usebibmacro{chapter+pages}%
+	\setunit{\bibpagerefpunct}\newblock
+	\usebibmacro{pageref}%
+	\setunit{\bibpagespunct}%
+	\usebibmacro{finentry}}
+
+
+\DeclareBibliographyDriver{inproceedings}{%
+	\usebibmacro{bibindex}%
+	\usebibmacro{begentry}%
+	\usebibmacro{author/translator+others}%
+	\setunit{\labelnamepunct}\newblock
+	\usebibmacro{title}%
+	\newunit
+	\printlist{language}%
+	\newunit\newblock
+	\usebibmacro{byauthor}%
+	\newunit\newblock
+	\usebibmacro{in:}%
+	\usebibmacro{maintitle+booktitle}%
+	\newunit\newblock
+	\usebibmacro{event+venue+date}%
+	\newunit\newblock
+	\usebibmacro{byeditor+others}%
+	\newunit\newblock
+	\iffieldundef{maintitle}
+	{\printfield{volume}%
+		\printfield{part}}
+	{}%
+	\newunit
+	\printfield{volumes}%
+	\setunit{\addspace}
+	\usebibmacro{series+number}%
+	\newunit\newblock
+	\printfield{note}%
+	\newunit\newblock
+	\printlist{organization}%
+	\newunit
+	\usebibmacro{publisher+location+date}%
+	\newunit\newblock
+	\usebibmacro{chapter+pages}%
+	\newunit\newblock
+	\iftoggle{bbx:isbn}
+	{\printfield{isbn}}
+	{}%
+	\newunit\newblock
+	\usebibmacro{doi+eprint+url}%
+	\newunit\newblock
+	\usebibmacro{addendum+pubstate}%
+	\setunit{\bibpagerefpunct}\newblock
+	\usebibmacro{pageref}%
+	\usebibmacro{finentry}}
+
+% Formatierung der Titel (kursiv oder nicht):
+\DeclareFieldFormat[book]{title}{\textit{#1}}
+\DeclareFieldFormat[book]{citetitle}{\textup{#1}}
+\DeclareFieldFormat[article]{title}{\textup{#1}}
+\DeclareFieldFormat[article]{citetitle}{\textup{#1}}
+\DeclareFieldFormat[article]{issuetitle}{\textup{#1}}
+\DeclareFieldFormat[incollection]{title}{\textup{#1}}
+\DeclareFieldFormat[incollection]{citetitle}{\textup{#1}}
+\DeclareFieldFormat[inproceedings]{title}{\textup{#1}}
+\DeclareFieldFormat[inproceedings]{citetitle}{\textup{#1}}
+\DeclareFieldFormat[bookinbook]{title}{\textup{#1}}
+\DeclareFieldFormat[bookinbook]{citetitle}{\textup{#1}}
+\DeclareFieldFormat{booktitle}{#1\isdot}
+\DeclareFieldFormat{maintitle}{#1\isdot}
+\DeclareFieldFormat{journaltitle}{#1\isdot}
+\DeclareFieldFormat[online]{title}{\textup{#1}}
+\DeclareFieldFormat[online]{citetitle}{\textup{#1}}
+%für Anführungszeichen: \DeclareFieldFormat[article]{title}{\mkbibquote{#1}}
+
+\begin{comment}
+\DeclareSortingScheme{Reihenfolge}{ %Reihenfolge der Einträge im LV (als Paket-Option: sorting=Reihenfolge)
+	\sort{\name{author}\name{editor}\name{sortname}}
+	\sort{\field{maintitle}}
+	\sort{\field[padside=left,padwidth=2,padchar=0]{volume}} % Optionen damit eine 0 vor einstelligen Zahlen für die alphabetische Reihenfolge
+	\sort{\field[padside=left,padwidth=2,padchar=0]{part}}
+	\sort{\field{booktitle}}
+	\sort{\field{title}}
+	\sort{\field{subtitle}}
+	\sort{\field{year}}
+}
+\end{comment}
+
+
+\urlstyle{same} % gleiche Schriftart für URL
+\DeclareFieldFormat{url}{\url{#1}} % Ohne URL:
+\DeclareFieldFormat{urldate}{\mkbibparens{#1}} % Ohne besucht am...
+
+\DeclareSourcemap{% Ohne urldate
+	\maps[datatype=bibtex]{
+		\map{
+			\step[fieldset=urldate, null]
+		}
+	}
+}
+
+
+%\DeclareFieldFormat{edition}{\textsuperscript{#1}} % Auflage als hochgestellt
+
+
+\begin{comment}
+% Damit das Originaljahr in eckigen Klammern im Zitat erscheint
+\DeclareFieldFormat{origdate}{\mkbibbrackets{#1}}
+\renewbibmacro*{cite}{%
+\iffieldundef{shorthand}
+{\ifthenelse{\ifciteibid\AND\NOT\iffirstonpage} % Ergänzung für ibid.
+{\usebibmacro{cite:ibid}} % Ergänzung für ibid.
+{\ifthenelse{\ifnameundef{labelname}\OR\iffieldundef{labelyear}}
+{\usebibmacro{cite:label}%
+\setunit{\printdelim{nonameyeardelim}}}
+{\printnames{labelname}%
+\setunit{\printdelim{nameyeardelim}}}%
+\printorigdate
+\setunit*{\addspace}
+\usebibmacro{cite:labeldate+extradate}}} % 1 Klammer Ergänzung für ibid.
+{\usebibmacro{cite:shorthand}}}
+\end{comment}
+
+% Für Originaljahr im LV
+\renewbibmacro*{date}{%
+	\iffieldundef{origyear}{%
+	}{%
+		\setunit*{\addspace}%
+		\printtext[brackets]{\printorigdate}%
+	}%
+}
+
+
 
 
 
